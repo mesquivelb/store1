@@ -4,13 +4,13 @@ class OrderItemBase(BaseModel):
     order_id: int
     product_id: int
     quantity: int
-    price: float
 
 class OrderItemCreate(OrderItemBase):
     pass
 
-class OrderItem(OrderItemBase):
+class OrderItem(OrderItemCreate):
     id: int
+    price: float
 
     class Config:
         orm_mode = True

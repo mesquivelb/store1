@@ -1,12 +1,14 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.models.users import User
-from app.schemas.users import UserCreate
+from app.schemas.users import UserCreate, UserLogin, Token
 from app.auth.auth import (
     get_password_hash,
     verify_password,
     create_access_token,
 )
+from app.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from datetime import timedelta
 
 def get_user(db: Session, user_id: int):
     return db.query(User).filter(User.id == user_id).first()
@@ -32,12 +34,13 @@ def authenticate_user(db: Session, email: str, password: str):
         return None
     return user
 
-def login_user(user: User):
-    token = create_access_token({"sub": user.email})
-    return {
-        "access_token": token,
-        "token_type": "bearer",
-    }
+def login_user(user: UserLogin) -> Token:
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(data={"sub": user.email, "id": user.id}, expires_delta=access_token_expires)
+    return Token(
+        access_token= access_token,
+        token_type= "bearer",
+    )
 
 def list_users(db: Session):
     return db.query(User).all()

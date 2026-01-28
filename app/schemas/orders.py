@@ -6,11 +6,17 @@ class OrderBase(BaseModel):
     total: float | None = 0.0
     status: str | None = "pending"
 
-class OrderCreate(OrderBase):
-    pass
+class OrderCreate(BaseModel):
+    user_id: int
 
-class Order(OrderBase):
+class OrderOut(BaseModel):
     id: int
+    user_id: int
+    total: float
+    status: str
 
     class Config:
         orm_mode = True
+
+class OrderUpdate(BaseModel):
+    status: str

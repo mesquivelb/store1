@@ -9,4 +9,5 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
     full_name = Column(String, nullable=True)
     orders = relationship("Order", back_populates="user")
+    cart_items = relationship("CartItem", back_populates="user")
 

@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session
 from app.schemas.products import Product, ProductCreate
 from app.services.products import create_product, get_product, list_products
 from app.database import get_db
+from app.auth.services import require_admin
+from app.auth.schemas import UserPayload
 
 router = APIRouter()
 
 @router.post("/", response_model=Product)
-def add_product(product: ProductCreate, db: Session = Depends(get_db)):
-    return create_product(db, product)
+def add_product(product: ProductCreate, db: Session = Depends(get_db), admin: UserPayload = Depends(require_admin)):
+    return create_product(db, product, admin)
 
 @router.get("/", response_model=list[Product])
 def all_products(db: Session = Depends(get_db)):

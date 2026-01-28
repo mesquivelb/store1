@@ -17,6 +17,8 @@ from app.services.users import (
     get_user_from_payload,
 )
 from app.auth.services import get_current_user_payload
+from app.auth.auth import create_access_token
+from app.auth.schemas import UserPayload
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -31,14 +33,15 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = authenticate_user(db, user.email, user.password)
     if not db_user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    return login_user(db_user)
+    token_data = {"sub": db_user.email, "id": db_user.id, "role": db_user.role}
+    token= create_access_token(token_data)
+    return {"access_token": token, "token_type": "bearer"}
 
 @router.get("/me", response_model=User)
 def read_users_me(
-    payload: dict = Depends(get_current_user_payload),
-    db: Session = Depends(get_db),
+    current_user: UserPayload = Depends(get_current_user_payload)
 ):
-    return get_user_from_payload(db, payload)
+    return current_user
 
 @router.get("/", response_model=list[User])
 def get_users(db: Session = Depends(get_db)):

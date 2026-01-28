@@ -2,8 +2,8 @@ from sqlalchemy.orm import Session
 from app.models.orders import Order
 from app.schemas.orders import OrderCreate
 
-def create_order(db: Session, order: OrderCreate):
-    db_order = Order(**order.dict())
+def create_order(db: Session, order_data: dict):
+    db_order = Order(**order_data)
     db.add(db_order)
     db.commit()
     db.refresh(db_order)
