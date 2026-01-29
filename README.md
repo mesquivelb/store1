@@ -4,6 +4,17 @@ Overview
 Tienda2 is a backend REST API for an e‑commerce application built with FastAPI. The project simulates a real online store workflow including authentication, cart management, order checkout, and payment processing.
 
 The main goal of this project is to demonstrate solid backend fundamentals, proper business logic separation, and secure, user‑scoped access control, making it suitable as a portfolio project for a first backend developer role.
+This API addresses the problem of reliable order and payment management in a digital commerce system.
+
+In many applications, orders and payments are handled inconsistently, which can lead to:
+
+Orders without a clear payment status
+
+Incorrect total calculations
+
+Payments not properly linked to real orders
+
+Data integrity issues between users, orders, and payments
 
 Tech Stack
 
