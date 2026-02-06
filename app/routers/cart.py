@@ -9,14 +9,14 @@ from app.auth.schemas import UserPayload
 router = APIRouter()
 
 @router.post("/", response_model=CartItem)
-def add_item(item: CartItemCreate, db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload) ):
+async def add_item(item: CartItemCreate, db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload) ):
     return add_to_cart(db, item, current_user.id)
 
 @router.get("/", response_model=list[CartItem])
-def get_cart( db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload)):
+async def get_cart( db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload)):
     return list_cart(db, current_user.id)
 
 @router.delete("/", status_code=204)
-def empty_cart(db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload)):
+async def empty_cart(db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload)):
     clear_cart(db, current_user.id)
     return {"message": "Cart cleared"}

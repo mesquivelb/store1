@@ -8,7 +8,7 @@ from app.auth.schemas import UserPayload
 router = APIRouter()
 
 @router.post("/{order_id}")
-def pay(
+async def pay(
     order_id: int,
     amount: float,
     db: Session = Depends(get_db), 

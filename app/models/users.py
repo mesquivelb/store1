@@ -10,4 +10,5 @@ class User(Base):
     full_name = Column(String, nullable=True)
     orders = relationship("Order", back_populates="user")
     cart_items = relationship("CartItem", back_populates="user")
+    role = Column(String, default="user")
 

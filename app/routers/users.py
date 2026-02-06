@@ -29,7 +29,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     return create_user(db, user)
 
 @router.post("/login", response_model=Token)
-def login(user: UserLogin, db: Session = Depends(get_db)):
+async def login(user: UserLogin, db: Session = Depends(get_db)):
     db_user = authenticate_user(db, user.email, user.password)
     if not db_user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -38,17 +38,17 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     return {"access_token": token, "token_type": "bearer"}
 
 @router.get("/me", response_model=User)
-def read_users_me(
+async def read_users_me(
     current_user: UserPayload = Depends(get_current_user_payload)
 ):
     return current_user
 
 @router.get("/", response_model=list[User])
-def get_users(db: Session = Depends(get_db)):
+async def get_users(db: Session = Depends(get_db)):
     return list_users(db)
 
 @router.get("/{user_id}", response_model=User)
-def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
+async def get_user_by_id(user_id: int, db: Session = Depends(get_db)):
     user = get_user(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

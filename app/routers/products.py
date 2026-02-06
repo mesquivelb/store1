@@ -9,15 +9,15 @@ from app.auth.schemas import UserPayload
 router = APIRouter()
 
 @router.post("/", response_model=Product)
-def add_product(product: ProductCreate, db: Session = Depends(get_db), admin: UserPayload = Depends(require_admin)):
+async def add_product(product: ProductCreate, db: Session = Depends(get_db), admin: UserPayload = Depends(require_admin)):
     return create_product(db, product, admin)
 
 @router.get("/", response_model=list[Product])
-def all_products(db: Session = Depends(get_db)):
+async def all_products(db: Session = Depends(get_db)):
     return list_products(db)
 
 @router.get("/{product_id}", response_model=Product)
-def single_product(product_id: int, db: Session = Depends(get_db)):
+async def single_product(product_id: int, db: Session = Depends(get_db)):
     db_product = get_product(db, product_id)
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")

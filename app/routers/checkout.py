@@ -9,7 +9,7 @@ from app.auth.schemas import UserPayload
 router = APIRouter()
 
 @router.post("/")
-def checkout( db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload)):
+async def checkout( db: Session = Depends(get_db), current_user:UserPayload=Depends(get_current_user_payload)):
     order = checkout_cart(db, current_user.id)
     if not order:
         return {"message": "Cart is empty"}
